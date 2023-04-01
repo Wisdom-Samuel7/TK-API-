@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+body {
+ display:flex;
+ justify-content:center;
+ align-items:center;
+}
+div {
+  height:10em;
+  width: 10em;
+  border:2px solid plum;
+  display:flex;
+  flex-flow:row wrap;
+  position:relative;
+}
+textarea {
+ height: 30%;
+ width: 98%;
+ border:2px solid navy;
+}
+button {
+ margin:.3em;
+ width:fit-content;
+ transform:translateX(1em);
+ color:red;
+ padding:.1em;
+ border-radius:1em;
+ border:none;
+ font-weight:bolder;
+}
+p {
+ position:absolute;
+ bottom:0;
+ left:1em;
+}
+.obj {
+  background: seagreen;
+  width: 2em;
+  height: 2em;
+ 
+}
+.txt {
+ display: none;  
+  
+}
+
+</style>
+<body>
+  <div> 
+  
+    <textarea> </textarea>
+  <textarea class="txt" id="text"> Text </textarea>
+   <button id="btn_a"> Voice Text </button>
+    <button id="btn_b"> Speak the text </button>
+    <p id="info" >  </p>
+  </div>
+    
+ <!-- 
+<form action="https://www.google.com/search" method="get" target="_blank">
+    <input placeholder="Search">
+    <input type="submit" autocomplete="off" autofocus="autofocus">
+  </form>
+ -->
+  
+<script type="text/javascript">
+
+let text = document.getElementById('text')
+
+window.addEventListener('load',greet)
+
+ function greet() {
+  
+  let welcomeNote = new SpeechSynthesisUtterance(text.value)
+  window.speechSynthesis.speak(welcomeNote)
+  
+}
+
+  let recog = new window.webkitSpeechRecognition || new SpeechRecognition()
+  
+   recog.continous = true
+
+  let info = document.querySelector("#info")
+  let btn = document.querySelector("#btn_a")
+  let txt = document.querySelector('textarea')
+  let btn_b = document.querySelector('#btn_b')
+ 
+  recog.onstart = () => {
+   info.innerHTML = "Speak Now"
+  }
+  
+  recog.onspeechend = () => {
+   info.innerText = "Speak End"
+  }
+  
+  recog.onresult = function (event) {
+    let content = event.resultIndex
+    let transcript = event.results[content][0]. transcript
+    txt.append(transcript)
+  }
+  
+  btn.onclick = function (event) {
+  //  console.log(event)
+   recog.start()
+  
+  }
+  
+ // Text translate Report 
+ let speakBtn = document.querySelector('#btn_b')
+ speakBtn.onclick = () => {
+   
+   let utterance = new SpeechSynthesisUtterance(txt.value)
+   utterance.pitch = 0
+   utterance.volume = 1
+   window.speechSynthesis.speak(utterance)
+   
+ }
+ 
+</script>
+</body>
